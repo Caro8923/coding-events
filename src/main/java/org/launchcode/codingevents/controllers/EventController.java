@@ -8,28 +8,35 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Controller
 @RequestMapping("events")
 public class EventController {
 
-    private static List<String> events = new ArrayList<>();
+    private static HashMap<String, String> events = new HashMap<String, String>(); {
+        events.put("Java & Coffee", "For coffee-lovers and coders alike!");
+        events.put("JavaScript Club", "Let's learn Javascript together!");
+        events.put("LaunchCode Lunch", "Lunch and coding for new Launchcode learners!");
+        }
 
     @GetMapping
     public String displayAllEvents(Model model) {
+        model.addAttribute("title", "AllEvents");
         model.addAttribute("events", events);
         return "events/index";
     }
 
     @GetMapping("create")
-    public String renderCreateEventForm() {
+    public String renderCreateEventForm(Model model) {
+        model.addAttribute("title", "AllEvents");
         return "events/create";
     }
 
     @PostMapping("create")
-    public String createEvent(@RequestParam String eventName) {
-        events.add(eventName);
+    public String createEvent(@RequestParam String eventName, String eventDescription) {
+        events.put(eventName, eventDescription);
         return "redirect:/events";
 
     }
